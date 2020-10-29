@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[8]:
-
-
 import numpy as np
 import pandas as pd
 
@@ -15,10 +9,6 @@ from functools import partial
 from keras.layers import Dense
 from keras.models import Sequential
 from keras.losses import categorical_crossentropy
-
-
-# In[9]:
-
 
 def transmission_coefficient(L,V,E):
     mass_by_hbar_squared = 1
@@ -32,11 +22,7 @@ def transmission_dispatcher(L,V,E,**kwargs):
     if kwargs.get('categorical',True):
         return bernoulli.rvs(T,0,kwargs.get('size',1000))
     else:
-        #return np.mean(bernoulli.rvs(T,0,kwargs.get('size',1000)))
         return T
-
-
-# In[11]:
 
 
 def generator(Ln=50, En=50, Vn=50, **kwargs):

@@ -13,7 +13,7 @@ from keras.layers import Dense
 from keras.models import Sequential
 from keras.losses import binary_crossentropy
 from keras.optimizers import SGD
-
+from keras.callbacks import EarlyStopping
 from sklearn.metrics import roc_curve
 from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
@@ -23,11 +23,11 @@ from sklearn.preprocessing import MinMaxScaler, StandardScaler
 
 def load(name=False):
     if name: return pd.read_csv(name)
-    df = pd.read_csv('tunnel-effect-database.csv')
+    df = pd.read_csv('database/database.csv')
     return df
 
 
-def preprocess(df, scaler=0, optsingle=False):
+def preprocess(df, scaler=1, optsingle=False):
     #
     # part 1) load and scale
     #
@@ -78,16 +78,17 @@ def create_and_predict(data,**kwargs):
                     ]
     model = Sequential(architecture)
     model.compile(
-                optimizer=SGD(learning_rate=kwargs.get('learning_rate',.01)),
+                optimizer=SGD(learning_rate=kwargs.get('learning_rate',.003)),
                 loss='binary_crossentropy',
                 metrics='accuracy',)
     #
     # 2) Fit
+    callback = EarlyStopping(monitor='loss', patience=5)
     results = model.fit(
             *data['train'],
-            batch_size=kwargs.get('batch_size',50),
+            batch_size=kwargs.get('batch_size',32),
             epochs=kwargs.get('epochs',50),
-            verbose=1,
+            verbose=1,callbacks=[callback],
             validation_data=data['val'],)
     #
     # 3) return results
@@ -100,7 +101,7 @@ def create_and_predict(data,**kwargs):
     #
     if kwargs.get('plot',False):
         case = 'test'
-        f, ax = plt.subplots(1,3)
+        f, ax = plt.subplots(1,3, figsize=(20,7))
         fpr, tpr, treshold = roc_curve(
                 results['ytrue_'+case], results['ypred_'+case]
                     )
@@ -113,20 +114,11 @@ def create_and_predict(data,**kwargs):
         ax[2].plot(results['val_loss'],c='g',label='validation')
         ax[2].legend()
         ax[2].set_ylim(0,1)
-        plt.show()
-        if False:
-            plt.plot(
-                *roc_curve(
-                    results['ytrue_test'], results['ypred_test']
-                        )[:-1])
+        plt.savefig('network-results.png')
     return results
 
 
-# In[ ]:
-
 if __name__=='__main__':
     import sys
-    create_and_predict(preprocess(load(sys.argv[1],sys.argv[2]),
-            neurons=int(sys.argv[3]), epochs=int(sys.argv[4]),plot=True))
-
-
+    create_and_predict(preprocess(load(),), 
+            neurons=int(sys.argv[1]), epochs=int(sys.argv[2]),plot=True)

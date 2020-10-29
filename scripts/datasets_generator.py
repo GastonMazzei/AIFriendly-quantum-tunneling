@@ -1,9 +1,3 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# In[14]:
-
-
 import numpy as np
 import pandas as pd
 
@@ -17,21 +11,10 @@ from keras.losses import categorical_crossentropy
 
 from tunnel_generator import *
 
-
-# $$\Delta \Psi = (V_{(x)}+E)\Psi$$
-# 
-# ![](../notebook-imgs/image1.png)
-# ![](../notebook-imgs/image2.png)
-# ![](../notebook-imgs/image3.png)
-
-# In[15]:
-
-
 def balanced_samples(d, partitions=4, **kwargs):
     """
     kwargs: verbose=True
     """
-
     # Shuffle and select the number of parts it 
     # will be split into
     #
@@ -62,53 +45,42 @@ def balanced_samples(d, partitions=4, **kwargs):
     return pd.concat(data,0)
 
 
-# In[16]:
-
-
-def main(required_length = 15E3, vainilla = True, size=300):
+def main(required_length = 15E3, vainilla = True, size=300, partition=50):
     df = pd.DataFrame()
     count = 0
     q = 0
-    while ((len(df)<required_length) and (count<25)):
-        print(f'\nIteration {count}:\nRequired Length: {required_length}\n'             f'Current Length: {len(df)}\n')
-        if vainilla: df = balanced_samples(generator(
-                                    50+q,
-                                    50+q,
-                                    50+q,
-                                    verbose=True,
-                                    domain = [np.linspace(1E-3,1E3,50+q),np.linspace(1E-2,0.99,50+q),np.linspace(1E-2,1E2,50+q)]),
-                                           50, verbose=False,)
-        else: df = generator(
+    LIMIT, INNER_LIMIT = 25, 5
+    while ((len(df)<required_length) and (count<LIMIT)):
+        print(f'\nIteration {count}:\nRequired Length: {required_length}\n'\
+              f'Current Length: {len(df)}\n')
+        if vainilla:
+          df = generator(
+                          50+q,
+                          50+q,
+                          50+q,
+                          verbose=True,
+                          domain = [np.logspace(-3,3,50+q),
+                                    np.logspace(-2,0,50+q)-0.001,
+                                    np.logspace(-2,2,50+q)]
+                                      ,)
+                                           
+          if (len(df)>=required_length) or (counter%INNER_LIMIT==0): 
+            df = balanced_samples(df, partition, verbose=True)
+          q += 10
+
+        else: 
+          df = generator(
                             int(1+q/5),
                             int(1+q/5),
                             int(1+q/5),
                             verbose=False,
                             vainilla=False,
                             size=size,)
-        count += 1
-        q += 5
+          q += 5
 
+        count += 1
     if len(df)>=required_length: print('\nSUCCESS! the required-length-condition WAS SATISFIED')
     else: print('\nFAILURE: the required-length-condition WAS NOT SATISFIED')
     print(f'\n\nREQUIRED: {required_length}\nACTUAL: {len(df)}')
     return df
-
-
-# In[17]:
-
-
-#df = main(10000, False)
-
-
-# In[19]:
-
-
-#print(df.head())
-#df.to_csv('../databases/tunnel-effect-database.csv', index=False)
-
-
-# In[ ]:
-
-
-
 
