@@ -32,10 +32,3 @@ The ROC-curve (left), output weights (middle) and training & validation curves f
 <br></i>
 <img src="data/results.png" width="800" height="450">
 
-
-
-
-
-
-<b>CONCLUSION</b>
-<img src="data/conclusion.png">
