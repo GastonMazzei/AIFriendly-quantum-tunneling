@@ -106,13 +106,16 @@ def create_and_predict(data,**kwargs):
                 results['ytrue_'+case], results['ypred_'+case]
                     )
         ax[0].plot(fpr, tpr)
+        ax[0].set_title('ROC curve')
         ax[1].hist(results['ypred_'+case])
         ax[1].set_xlim(0,1)
+        ax[1].set_title('Output probabilities histogram')
         ax[2].plot(results['accuracy'],c='b',label='train')
         ax[2].plot(results['val_accuracy'],c='g')
         ax[2].plot(results['loss'],c='b')
         ax[2].plot(results['val_loss'],c='g',label='validation')
         ax[2].legend()
+        ax[2].set_title('Training metrics')
         ax[2].set_ylim(0,1)
         plt.savefig('network-results.png')
     return results
