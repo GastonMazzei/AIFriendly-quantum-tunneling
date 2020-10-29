@@ -1,11 +1,11 @@
 # AIFriendly-quantum-tunneling
-AIFriendly was able to predict the transition probability based on shape
-<i>(The database is here provided because (a) it's very light and (b) it's CPU-intensive)</i>
+AIFriendly was able to predict the transition probability based on the three physical parameters: Potential shape (height & width) and incident Energy level<br>
+<i>(The database is here provided because it's CPU-intensive; you can also build it yourself running ```bash generate_database.sh```)</i>
 
 ---
 
 <h2><p align=center><b>1) Introduction</b></p></h2>
-<img src="data/introduction.png"><br>
+<img src="static/introduction.png"><br>
 <i>This are the equations (left) and the diagram (right) that describe the Quantum Mechanical problem of a particle that is related to a potential barrier. There are three parameters: the incident Energy, the barrier's height and the barrier's thickness.</i><br>
 
 ---
@@ -25,11 +25,12 @@ AIFriendly was able to predict the transition probability based on shape
 
 <b>RIGHT :+1: 75%:</b> for the case in which all Bernoulli-probabilities appear in equal relative proportions (i.e. the distribution of the Bernoulli-probability is a random distribution) the best accuracy a deterministic predictive-model can achieve is 75%, as shown in the following image:</b></i>
 <br> 
-<img src="data/math.png" width="400" height="100">
+<img src="static/math.png" width="400" height="100">
 
 <h2><p align=center><b>4) How did AI-Friendly perform at taggin the input vectors of a database of different physical parameters (Energy, Height and Width)? </b></p></h2>
 <i><b>As good as it can be done :+1: 75%</b> <br>
 The ROC-curve (left), output weights (middle) and training & validation curves for accuracy and loss are shown next.
 <br></i>
-<img src="data/results.png" width="800" height="450">
+<img src="static/results.png" width="800" height="450">
+<i>you can generate this results yourself by running ```bash generate_network.sh```</i>
 
