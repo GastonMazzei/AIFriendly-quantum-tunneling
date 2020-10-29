@@ -32,5 +32,9 @@ AIFriendly was able to predict the transition probability based on the three phy
 The ROC-curve (left), output weights (middle) and training & validation curves for accuracy and loss are shown next.
 <br></i>
 <img src="static/results.png" width="800" height="450">
-<i>you can generate this results yourself by running ```bash generate_network.sh```</i>
+<i>you can generate this results yourself by running</i> 
+
+```
+bash generate_network.sh
+```
 
